@@ -1,0 +1,36 @@
+server:
+  port: 8888
+  servlet:
+    context-path: /uaa
+  tomcat:
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+    use-relative-redirects: true
+
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/human_resource?useSSL=false&characterEncoding=utf8&serverTimezone=GMT%2B8
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+  application:
+    name: uaa
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  main:
+    allow-bean-definition-overriding: true
+  freemarker:
+    charset: UTF-8
+    request-context-attribute: rc
+    content-type: text/html
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+
+mybatis-plus:
+  type-aliases-package: com.sunshine.uaa.entity
+  size: 1

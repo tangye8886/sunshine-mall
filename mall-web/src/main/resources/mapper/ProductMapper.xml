@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunshine.mallweb.dao.ProductInfoDao">
+
+    <resultMap id="baseResultMap" type="com.sunshine.mallweb.entity.ProductInfo">
+        <id property="id" column="id"></id>
+        <result property="productNo" column="product_no"></result>
+        <result property="productName" column="product_name"></result>
+        <result property="productPrice" column="product_price"></result>
+        <result property="productDescription" column="product_description"></result>
+        <result property="productImg" column="product_img"></result>
+        <result property="categoryType" column="category_type"></result>
+        <result property="productInventory" column="product_inventory"></result>
+        <result property="productActivity" column="product_activity"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+        <association property="productCategory" javaType="com.sunshine.mallweb.entity.ProductCategory" select="com.sunshine.mallweb.dao.ProductCategoryDao.getProductCategoryById" column="category_type">
+            <id property="categoryId" column="id"></id>
+            <result property="categoryName" column="name"></result>
+            <result property="categoryType" column="name"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="getProductInfoListByConditionPage" parameterType="com.sunshine.mallweb.dto.ProductInfoDTO" resultMap="baseResultMap">
+        SELECT
+         *
+        FROM
+        product_info
+        WHERE
+        1=1
+        <if test="product.productName != null and product.productName != ''">
+            and product_name like concat('%',#{product.productName},'%')
+        </if>
+        <if test="product.productNo != null and product.productNo != ''">
+            and product_no = #{product.productNo},'%')
+        </if>
+        <if test="product.productStatus != null ">
+            and product_status = #{product.productStatus}
+        </if>
+        <if test="product.enabled != null ">
+            and enabled = #{product.enabled}
+        </if>
+        <if test="product.orderByType != null and  product.orderByType == 1 ">
+            order by product_price desc
+        </if>
+        <if test="product.orderByType != null and product.orderByType == 2 ">
+            order by product_price asc
+        </if>
+
+    </select>
+
+
+    <select id="getProductInfoById" parameterType="java.lang.String" resultMap="baseResultMap">
+        select * from product_info where id=#{id}
+    </select>
+
+</mapper>

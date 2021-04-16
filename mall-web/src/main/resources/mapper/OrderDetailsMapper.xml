@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sunshine.mallweb.dao.OrderDetailDao">
+
+    <resultMap id="baseResultMap" type="com.sunshine.mallweb.entity.OrderDetail">
+        <id property="detailId" column="detail_id"></id>
+        <result property="orderId" column="order_id"></result>
+        <result property="productId" column="product_id"></result>
+        <result property="productName" column="product_name"></result>
+        <result property="productPrice" column="product_price"></result>
+        <result property="productQuantity" column="product_quantity"></result>
+        <association property="productInfo" javaType="com.sunshine.mallweb.entity.ProductInfo" select="com.sunshine.mallweb.dao.ProductInfoDao.getProductInfoById" column="product_id">
+            <id property="id" column="id"></id>
+            <result property="productNo" column="product_no"></result>
+            <result property="productName" column="product_name"></result>
+            <result property="productPrice" column="product_price"></result>
+            <result property="productDescription" column="product_description"></result>
+            <result property="productImg" column="product_img"></result>
+            <result property="categoryType" column="category_type"></result>
+            <result property="productInventory" column="product_inventory"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="getOrderDetailsByConditionPage" parameterType="com.sunshine.mallweb.dto.OrderDetailDTO" resultMap="baseResultMap">
+        SELECT
+         *
+        FROM
+        order_detail
+        WHERE
+        1=1
+        <if test="orderDetail.orderId != null and orderDetail.orderId != ''">
+            and order_id = #{orderDetail.orderId}
+        </if>
+        <if test="orderDetail.productId != null and orderDetail.productId != ''">
+            and product_id = #{orderDetail.productId}
+        </if>
+        <if test="orderDetail.productName != null and orderDetail.productName != ''">
+            and product_name like concat('%',#{orderDetail.productName},'%')
+        </if>
+        <if test="orderDetail.enabled != null">
+            and enabled = #{orderDetail.enabled}
+        </if>
+
+    </select>
+
+    <select id="getOrderDetailListByOrderId" parameterType="java.lang.String" resultMap="baseResultMap">
+        select * from order_detail where order_id=#{id}
+    </select>
+
+    <select id="getOrderDetailsById" parameterType="java.lang.String" resultMap="baseResultMap">
+        select * from order_detail where id=#{id}
+    </select>
+
+</mapper>
